@@ -16,6 +16,10 @@ export class UserService {
         return await this.userRepository.find()
     }
 
+    async paginate(page  =  1){
+        
+    }
+
     async create(data): Promise<User>{
         return await this.userRepository.save(data)
     }
@@ -23,4 +27,14 @@ export class UserService {
     async findOne(condition): Promise<User> {
         return await this.userRepository.findOne(condition)
     }
+
+    async update(id:number,data): Promise<any>{
+        return this.userRepository.update(id,data)
+    }
+
+    async delete(id: number): Promise<any>{
+        return this.userRepository.delete(id)
+    }
+
+
 }
