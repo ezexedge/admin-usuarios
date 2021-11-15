@@ -1,4 +1,4 @@
-import { Body, Controller, Get,Post,UseGuards,UseInterceptors,ClassSerializerInterceptor, Param, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Get,Post,UseGuards,UseInterceptors,ClassSerializerInterceptor, Param, Put, Delete, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './models/user.entity';
 import * as bcrypt from 'bcryptjs'
@@ -13,8 +13,8 @@ export class UserController {
     constructor(private userService: UserService){}
 
      @Get()
-       async all(): Promise<User[]> {
-            return await this.userService.all()
+       async all(@Query('page') page:number): Promise<User[]> {
+            return await this.userService.paginate(page)
         }
 
     
@@ -23,11 +23,14 @@ export class UserController {
 
         const password = await  bcrypt.hash('1234',12)
 
+
+
         return this.userService.create({
           first_name: body.first_name,
           last_name: body.last_name,
           email: body.email,
-          password
+          password,
+          role: {id: body.role_id}
         })
       }
 
@@ -43,7 +46,16 @@ export class UserController {
       @Body() body: UserCreateDto
     ){
 
-    await this.userService.update(id,body)      
+      const {role_id,...data} = body
+
+
+
+    await this.userService.update(id,{
+      ...data,
+      role_id:{
+        id:  role_id
+      }
+    })      
 
     return this.userService.findOne({id})
 
