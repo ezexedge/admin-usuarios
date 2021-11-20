@@ -6,6 +6,11 @@ import {TypeOrmModule} from '@nestjs/typeorm'
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from './common/common.module';
 import { RoleModule } from './role/role.module';
+import {PermissionModule} from './permission/permission.module'
+import { AbstractService } from './common/abstract.service';
+import { ProductModule } from './product/product.module';
+import { UploadController } from './upload/upload.controller';
+import { OrderModule } from './order/order.module';
 @Module({
   imports: [UserModule,
     TypeOrmModule.forRoot({
@@ -21,8 +26,12 @@ import { RoleModule } from './role/role.module';
     AuthModule,
     CommonModule,
     RoleModule,
+    PermissionModule,
+    ProductModule,
+    OrderModule
+
   ],
-  controllers: [AppController],
+  controllers: [AppController, UploadController],
   providers: [AppService],
 })
 export class AppModule {}
